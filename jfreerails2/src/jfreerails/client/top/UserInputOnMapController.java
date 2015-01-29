@@ -198,40 +198,6 @@ public class UserInputOnMapController extends KeyAdapter {
         }
     }
 
-    private void cursorOneTileMove(ImPoint oldPosition, Step vector) {
-        boolean b = (modelRoot.getProperty(ModelRoot.Property.CURSOR_MODE) == ModelRoot.Value.BUILD_TRACK_CURSOR_MODE);
-
-        if (null != trackBuilder && b) {
-            trackBuilder.setBuildTrackStrategy(getBts());
-            MoveStatus ms = trackBuilder.buildTrack(oldPosition, vector);
-
-            if (ms.ok) {
-                setCursorMessage("");
-                playAppropriateSound();
-            } else {
-                setCursorMessage(ms.message);
-            }
-
-        } else {
-            logger.warn("No track builder available!");
-        }
-    }
-
-    private void playAppropriateSound() {
-        switch (trackBuilder.getTrackBuilderMode()) {
-        case BUILD_TRACK:
-        case UPGRADE_TRACK:
-            soundManager.playSound(JFREERAILS_CLIENT_SOUNDS_BUILDTRACK_WAV, 0);
-            break;
-        case REMOVE_TRACK:
-            soundManager.playSound("/jfreerails/client/sounds/removetrack.wav",
-                    0);
-            break;
-        default:
-            // do nothing
-        }
-    }
-
     public void setup(MapViewJComponent mv, TrackMoveProducer trackBuilder,
             StationTypesPopup stPopup, ModelRoot mr, DialogueBoxController dbc,
             FreerailsCursor cursor, BuildTrackController buildTrack) {
@@ -254,39 +220,8 @@ public class UserInputOnMapController extends KeyAdapter {
         mapView.addKeyListener(this);
     }
 
-    private void cursorJumped(ImPoint to) {
-        // if (trackBuilder.getTrackBuilderMode() ==
-        // TrackMoveProducer.UPGRADE_TRACK) {
-        // MoveStatus ms = trackBuilder.upgradeTrack(to);
-        //
-        // if (ms.ok) {
-        // setCursorMessage("");
-        // playAppropriateSound();
-        // } else {
-        // setCursorMessage(ms.message);
-        // }
-        // }
-    }
+   
 
-    private ImPoint getCursorPosition() {
-        ImPoint point = (ImPoint) modelRoot
-                .getProperty(ModelRoot.Property.CURSOR_POSITION);
-
-        // Check for null
-        point = null == point ? new ImPoint() : point;
-
-        return point;
-    }
-
-    private void setCursorPosition(ImPoint p) {
-        // Make a defensive copy.
-        ImPoint point = p;
-        modelRoot.setProperty(Property.CURSOR_POSITION, point);
-    }
-
-    private void setCursorMessage(String s) {
-        modelRoot.setProperty(Property.CURSOR_MESSAGE, s);
-    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -482,15 +417,47 @@ public class UserInputOnMapController extends KeyAdapter {
         }
         }
     }
+    
+    
+    private void cursorOneTileMove(ImPoint oldPosition, Step vector) {
+        boolean b = (modelRoot.getProperty(ModelRoot.Property.CURSOR_MODE) == ModelRoot.Value.BUILD_TRACK_CURSOR_MODE);
 
-    private void cancelProposedBuild() {
-        ignoreDragging = true;
-        buildTrack.hide();
-        StationBuildModel sbm = actionRoot.getStationBuildModel();
-        sbm.getStationCancelAction().actionPerformed(
-                new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
-        setIgnoreKeyEvents(false);
+        if (null != trackBuilder && b) {
+            trackBuilder.setBuildTrackStrategy(getBts());
+            MoveStatus ms = trackBuilder.buildTrack(oldPosition, vector);
+
+            if (ms.ok) {
+                setCursorMessage("");
+                playAppropriateSound();
+            } else {
+                setCursorMessage(ms.message);
+            }
+
+        } else {
+            logger.warn("No track builder available!");
+        }
     }
+
+
+
+
+    private void cursorJumped(ImPoint to) {
+        // if (trackBuilder.getTrackBuilderMode() ==
+        // TrackMoveProducer.UPGRADE_TRACK) {
+        // MoveStatus ms = trackBuilder.upgradeTrack(to);
+        //
+        // if (ms.ok) {
+        // setCursorMessage("");
+        // playAppropriateSound();
+        // } else {
+        // setCursorMessage(ms.message);
+        // }
+        // }
+//        dialogueBoxController.showStationOrTerrainInfo(to.x,
+//        		to.y);
+    }
+
+    
 
     private void moveCursorJump(ImPoint tryThisPoint) {
         setCursorMessage("");
@@ -503,21 +470,6 @@ public class UserInputOnMapController extends KeyAdapter {
         }
     }
 
-    /**
-     * Checks whether specified point is in legal rectangle.
-     * 
-     * @param tryThisPoint
-     *            ImPoint
-     * @return boolean
-     */
-    private boolean legalRectangleContains(ImPoint tryThisPoint) {
-        ReadOnlyWorld world = modelRoot.getWorld();
-        int width = world.getMapWidth();
-        int height = world.getMapHeight();
-        Rectangle legalRectangle = new Rectangle(0, 0, width, height);
-
-        return legalRectangle.contains(tryThisPoint.toPoint());
-    }
 
     private void moveCursorOneTile(Step v) {
         setCursorMessage(null);
@@ -535,6 +487,66 @@ public class UserInputOnMapController extends KeyAdapter {
         }
     }
 
+    private ImPoint getCursorPosition() {
+        ImPoint point = (ImPoint) modelRoot
+                .getProperty(ModelRoot.Property.CURSOR_POSITION);
+
+        // Check for null
+        point = null == point ? new ImPoint() : point;
+
+        return point;
+    }
+
+    private void setCursorPosition(ImPoint p) {
+        // Make a defensive copy.
+        ImPoint point = p;
+        modelRoot.setProperty(Property.CURSOR_POSITION, point);
+    }
+
+    private void setCursorMessage(String s) {
+        modelRoot.setProperty(Property.CURSOR_MESSAGE, s);
+    }
+    
+    private void cancelProposedBuild() {
+        ignoreDragging = true;
+        buildTrack.hide();
+        StationBuildModel sbm = actionRoot.getStationBuildModel();
+        sbm.getStationCancelAction().actionPerformed(
+                new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
+        setIgnoreKeyEvents(false);
+    }
+    
+    private void playAppropriateSound() {
+        switch (trackBuilder.getTrackBuilderMode()) {
+        case BUILD_TRACK:
+        case UPGRADE_TRACK:
+            soundManager.playSound(JFREERAILS_CLIENT_SOUNDS_BUILDTRACK_WAV, 0);
+            break;
+        case REMOVE_TRACK:
+            soundManager.playSound("/jfreerails/client/sounds/removetrack.wav",
+                    0);
+            break;
+        default:
+            // do nothing
+        }
+    }
+    
+    /**
+     * Checks whether specified point is in legal rectangle.
+     * 
+     * @param tryThisPoint
+     *            ImPoint
+     * @return boolean
+     */
+    private boolean legalRectangleContains(ImPoint tryThisPoint) {
+        ReadOnlyWorld world = modelRoot.getWorld();
+        int width = world.getMapWidth();
+        int height = world.getMapHeight();
+        Rectangle legalRectangle = new Rectangle(0, 0, width, height);
+
+        return legalRectangle.contains(tryThisPoint.toPoint());
+    }
+    
     private BuildTrackStrategy getBts() {
         BuildTrackStrategy bts = (BuildTrackStrategy) modelRoot
                 .getProperty(ModelRoot.Property.BUILD_TRACK_STRATEGY);
