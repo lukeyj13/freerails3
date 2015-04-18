@@ -38,7 +38,7 @@ public class ClientJFrame extends javax.swing.JFrame {
 
         rhsjPanel = new javax.swing.JPanel();
         mapOverview = gUIComponentFactory.createOverviewMap();
-        trainsJTabPane1 = gUIComponentFactory.createTrainsJTabPane();
+        trainsJTabPane1 = gUIComponentFactory.getRHSJTabPanel();
 
         lhsjPanel = new javax.swing.JPanel();
         mainMapView = gUIComponentFactory.createMainMap();

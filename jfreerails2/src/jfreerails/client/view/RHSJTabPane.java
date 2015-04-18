@@ -28,16 +28,19 @@ public class RHSJTabPane extends JTabbedPane implements ModelRootListener {
 
     private final TerrainInfoJPanel terrainInfoPanel;
 
-    private final StationInfoJPanel stationInfoPanel;
 
-    private final TrainListJPanel trainListPanel;
+	private final StationInfoJPanel stationInfoPanel;
+
+	private final TrainListJPanel trainListPanel;
 
     private final BuildTrackJPanel buildTrackPanel;
 
     private ReadOnlyWorld world;
 
     private int trainListIndex;
-
+    private int stationInfoIndex;
+    private int terrainInfoIndex;
+    
     public RHSJTabPane() {
         /*
          * Dont accept keyboard focus since we want to leave it with the main
@@ -47,7 +50,8 @@ public class RHSJTabPane extends JTabbedPane implements ModelRootListener {
 
         ImageIcon trainListIcon;
         ImageIcon buildTrackIcon;
-
+        ImageIcon stationInfoIcon;
+        
         /* set up trainsJTabbedPane */
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         terrainInfoPanel = new TerrainInfoJPanel();
@@ -64,25 +68,32 @@ public class RHSJTabPane extends JTabbedPane implements ModelRootListener {
         URL buildTrackIconUrl = getClass().getResource(
                 "/jfreerails/client/graphics/icons/track_new.png");
         buildTrackIcon = new ImageIcon(buildTrackIconUrl);
+        
         URL trainListIconUrl = getClass().getResource(
                 "/jfreerails/client/graphics/icons/train_list.png");
         trainListIcon = new ImageIcon(trainListIconUrl);
+        
+        URL stationListIconUrl = getClass().getResource(
+                "/jfreerails/client/graphics/icons/train_list.png");
+        stationInfoIcon = new ImageIcon(stationListIconUrl);
+        
         // Note titles set to null so only the icon appears at the top of the
         // top.
         JScrollPane terrainInfoJScrollPane = new JScrollPane(terrainInfoPanel);
         terrainInfoJScrollPane
                 .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         addTab(null, terrainInfoIcon, terrainInfoJScrollPane, "Terrain Info");
+        this.terrainInfoIndex= this.getTabCount()-1;
+        
         stationInfoPanel = new StationInfoJPanel();
         stationInfoPanel.removeCloseButton();
         // Don't show the station info tab until it has been rewritten to take
         // up less space.
-        // JScrollPane stationInfoJScrollPane = new
-        // JScrollPane(stationInfoPanel);
-        // stationInfoJScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        // addTab(null, stationInfoIcon, stationInfoJScrollPane, "Station
-        // Info");
-        // this.stationInfoIndex= this.getTabCount()-1;
+         JScrollPane stationInfoJScrollPane = new
+         JScrollPane(stationInfoPanel);
+         stationInfoJScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+         addTab(null, stationInfoIcon, stationInfoJScrollPane, "Station Info");
+         this.stationInfoIndex= this.getTabCount()-1;
 
         trainListPanel.setTrainViewHeight(20);
         addTab(null, buildTrackIcon, buildTrackPanel, "Build Track");
@@ -131,8 +142,31 @@ public class RHSJTabPane extends JTabbedPane implements ModelRootListener {
         this.setEnabledAt(this.trainListIndex, enabled);
     }
 
-    public void setStationTabEnabled(boolean enabled) {
-        // this.setEnabledAt(this.stationInfoIndex, enabled);
+//    public void setStationTabEnabled(boolean enabled) {
+//        this.setEnabledAt(this.stationInfoIndex, enabled);
+//    }
+//    
+//    public void setTerrainTabEnabled(boolean enabled) {
+//        this.setEnabledAt(this.terrainInfoIndex, enabled);
+//    }
+    
+    public void selectTerrainInfoPanel() {
+    	this.setEnabledAt(terrainInfoIndex, true);
+    	this.setSelectedIndex(terrainInfoIndex);
     }
+    
+    public void selectStationInfoPanel() {
+    	this.setEnabledAt(stationInfoIndex, true);
+    	this.setSelectedIndex(stationInfoIndex);
+    }
+    
+    public StationInfoJPanel getStationInfoPanel() {
+		return stationInfoPanel;
+	}
+    
+    public TerrainInfoJPanel getTerrainInfoPanel() {
+		return terrainInfoPanel;
+	}
+
 
 }

@@ -160,7 +160,7 @@ public class SimpleComponentFactoryImpl2 implements
         return null;
     }
 
-    public JTabbedPane createTrainsJTabPane() {
+    public JTabbedPane getRHSJTabPanel() {
         return null;
     }
 

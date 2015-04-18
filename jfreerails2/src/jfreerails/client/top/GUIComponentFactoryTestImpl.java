@@ -103,7 +103,7 @@ public class GUIComponentFactoryTestImpl implements GUIComponentFactory {
         return mapOverview;
     }
 
-    public JTabbedPane createTrainsJTabPane() {
+    public JTabbedPane getRHSJTabPanel() {
         return trainsJPanel;
     }
 

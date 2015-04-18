@@ -213,7 +213,10 @@ public class StationInfoJPanel extends JPanel implements View,
                             .getCargoBundleID());
             String title = "<h2 align=\"center\">" + station.getStationName()
                     + " (" + stationTypeName + ")</h2>";
-            String table = "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\"><tr><td>&nbsp;</td>\n    <td>Will pay for</td>\n    <td>Supplies / cars per year</td><td>Waiting for pickup / car loads</td>  </tr>";
+            //String table = "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\"><tr><td>&nbsp;</td>\n    <td>Will pay for</td>\n    <td>Supplies / cars per year</td><td>Waiting for pickup / car loads</td>  </tr>";
+            //TODO remove
+            String table = "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\"><tr><td>&nbsp;</td>\n    <td>Demand</td>\n    <td>Provides<br />(cars/year)</td><td>Available<br />(car loads)</td>  </tr>";
+            
             for (int i = 0; i < w.size(SKEY.CARGO_TYPES); i++) {
 
                 // get the values

@@ -135,7 +135,7 @@ public class GUIComponentFactoryImpl implements GUIComponentFactory,
     /**
      * This is the panel at the bottom right of the screen.
      */
-    private final RHSJTabPane trainsJTabPane;
+    private final RHSJTabPane rhsJTabPanel;
 
     private final UserInputOnMapController userInputOnMapController;
 
@@ -148,7 +148,10 @@ public class GUIComponentFactoryImpl implements GUIComponentFactory,
     public GUIComponentFactoryImpl(ModelRootImpl mr, ActionRoot ar) {
         modelRoot = mr;
         actionRoot = ar;
-        userInputOnMapController = new UserInputOnMapController(modelRoot, ar);
+        
+        GUIComponents guiComponents = new GUIComponents ();
+        
+        userInputOnMapController = new UserInputOnMapController(modelRoot, ar, guiComponents);
         buildMenu = new jfreerails.client.top.BuildMenu();
         mapViewJComponent = new MapViewJComponentConcrete();
         mainMapScrollPane1 = new JScrollPane();
@@ -159,7 +162,8 @@ public class GUIComponentFactoryImpl implements GUIComponentFactory,
         mediator.setup(overviewMapContainer, mainMapScrollPane1.getViewport(),
                 mapViewJComponent, r);
 
-        trainsJTabPane = new RHSJTabPane();
+        rhsJTabPanel = new RHSJTabPane();
+        guiComponents.setRHControlPanel(rhsJTabPanel);
         datejLabel = new DateJLabel();
 
         cashjLabel = new CashJLabel();
@@ -206,8 +210,8 @@ public class GUIComponentFactoryImpl implements GUIComponentFactory,
         } else {
             enabled = false;
         }
-
-        this.trainsJTabPane.setStationTabEnabled(enabled);
+        // TODO why commented out in called method?
+//        this.rhsJTabPanel.setStationTabEnabled(enabled);
         this.stationInfoJMenuItem.setEnabled(enabled);
     }
 
@@ -222,7 +226,7 @@ public class GUIComponentFactoryImpl implements GUIComponentFactory,
             enabled = false;
         }
 
-        this.trainsJTabPane.setTrainTabEnabled(enabled);
+        this.rhsJTabPanel.setTrainTabEnabled(enabled);
         this.trainListJMenuItem.setEnabled(enabled);
         this.trainOrdersJMenuItem.setEnabled(enabled);
     }
@@ -573,8 +577,8 @@ public class GUIComponentFactoryImpl implements GUIComponentFactory,
         return reportsMenu;
     }
 
-    public JTabbedPane createTrainsJTabPane() {
-        return trainsJTabPane;
+    public JTabbedPane getRHSJTabPanel() {
+        return rhsJTabPanel;
     }
 
     public BuildTrackController getBuildTrackController() {
@@ -671,7 +675,7 @@ public class GUIComponentFactoryImpl implements GUIComponentFactory,
 
         datejLabel.setup(modelRoot, vl, null);
         cashjLabel.setup(modelRoot, vl, null);
-        trainsJTabPane.setup(actionRoot, vl, modelRoot);
+        rhsJTabPanel.setup(actionRoot, vl, modelRoot);
 
         dialogueBoxController.setup(modelRoot, vl);
 

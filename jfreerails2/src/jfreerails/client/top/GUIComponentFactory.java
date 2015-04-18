@@ -14,7 +14,7 @@ import javax.swing.JTabbedPane;
 public interface GUIComponentFactory {
     JPanel createOverviewMap();
 
-    JTabbedPane createTrainsJTabPane();
+    JTabbedPane getRHSJTabPanel();
 
     JScrollPane createMainMap();
 

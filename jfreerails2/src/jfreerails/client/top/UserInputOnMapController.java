@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
 import org.apache.log4j.Logger;
 
 import javax.swing.SwingUtilities;
@@ -23,6 +24,7 @@ import jfreerails.client.view.FreerailsCursor;
 import jfreerails.client.view.MapViewJComponent;
 import jfreerails.client.view.ServerControlModel;
 import jfreerails.client.view.StationBuildModel;
+import jfreerails.client.view.common.StationHelper;
 import jfreerails.controller.BuildTrackStrategy;
 import jfreerails.controller.ModelRoot;
 import jfreerails.controller.TrackMoveProducer;
@@ -66,10 +68,12 @@ public class UserInputOnMapController extends KeyAdapter {
     private SoundManager soundManager = SoundManager.getSoundManager();
 
     private boolean ignoreDragging = false;
+    
+    private GUIComponents guiComponents;
 
-    public UserInputOnMapController(ModelRoot mr, ActionRoot ar) {
+    public UserInputOnMapController(ModelRoot mr, ActionRoot ar, GUIComponents guiComponents) {
         modelRoot = mr;
-
+        this.guiComponents = guiComponents;
         actionRoot = ar;
     }
 
@@ -442,6 +446,7 @@ public class UserInputOnMapController extends KeyAdapter {
 
 
     private void cursorJumped(ImPoint to) {
+    	
         // if (trackBuilder.getTrackBuilderMode() ==
         // TrackMoveProducer.UPGRADE_TRACK) {
         // MoveStatus ms = trackBuilder.upgradeTrack(to);
@@ -455,6 +460,8 @@ public class UserInputOnMapController extends KeyAdapter {
         // }
 //        dialogueBoxController.showStationOrTerrainInfo(to.x,
 //        		to.y);
+    	
+    	StationHelper.showStationOrTerrainInfo(to.x, to.y, guiComponents.getRHControlPanel(), modelRoot);
     }
 
     
