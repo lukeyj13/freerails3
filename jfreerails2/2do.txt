@@ -1,3 +1,8 @@
+Buy buildings
+Improve UI of demand/supply
+Click trains to select them
+More train information in right panel
+
  - add szenarios
  - make new release schema
  - add jnlp cache cleaner http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6566071
